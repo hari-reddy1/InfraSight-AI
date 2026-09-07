@@ -1,15 +1,14 @@
-import numpy as np
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
+
 from typing import List, Dict, Any
 from app.services.ml_engine import ml_engine
 
+
 class SHAPService:
-    """
-    Explainable AI (XAI) Service:
-    - Generates feature attribution breakdowns.
-    - Strictly labels explanations as 'Predictive drivers', NOT 'Causal reasons'
-      (satisfies requirement 13 & 39).
-    """
-    
     FEATURE_LABELS = {
         "cost_escalation_ratio": "Historical Cost Escalation Pattern",
         "expenditure_ratio": "Expenditure Drawdown Trajectory",
@@ -25,30 +24,33 @@ class SHAPService:
 
     @classmethod
     def explain_prediction(cls, record: dict) -> List[Dict[str, Any]]:
-        features = ml_engine.extract_features(record)
+        features_raw = ml_engine.extract_features(record)
+        features = [float(x) for x in features_raw]
         feature_names = ml_engine.FEATURE_NAMES
-        
-        # Calculate feature deviation from expected baseline
-        # Baseline expectations: cost_esc=1.0, prog_gap=0, milestone_slip=0, contractor_stress=0
+
         deviations = [
-            max(0.0, features[0] - 1.0) * 20.0, # cost escalation
-            max(0.0, features[1] - 0.5) * 15.0, # exp ratio
-            max(0.0, (100.0 - features[2]) * 0.2), # low physical progress
-            max(0.0, features[3] * 0.8), # progress divergence gap
-            features[4] * 25.0, # milestone slippage
-            max(0.0, (100.0 - features[5]) * 0.5), # land deficit
-            features[6] * 0.3, # monsoon
-            features[7] * 35.0, # geology
-            features[8] * 30.0, # contractor stress
-            features[9] * 0.8 # steel surge
+            max(0.0, features[0] - 1.0) * 20.0,
+            max(0.0, features[1] - 0.5) * 15.0,
+            max(0.0, (100.0 - features[2]) * 0.2),
+            max(0.0, features[3] * 0.8),
+            features[4] * 25.0,
+            max(0.0, (100.0 - features[5]) * 0.5),
+            features[6] * 0.3,
+            features[7] * 35.0,
+            features[8] * 30.0,
+            features[9] * 0.8
         ]
-        
+
         total_dev = sum(deviations) if sum(deviations) > 0 else 1.0
         proportions = [(d / total_dev) * 100.0 for d in deviations]
-        
-        # Select top contributing factors
-        ranked_indices = np.argsort(proportions)[::-1][:4]
-        
+
+        if HAS_NUMPY:
+            ranked_indices = np.argsort(proportions)[::-1][:4]
+            ranked_indices = [int(i) for i in ranked_indices]
+        else:
+            indexed = sorted(enumerate(proportions), key=lambda x: x[1], reverse=True)
+            ranked_indices = [i for i, _ in indexed[:4]]
+
         drivers = []
         for idx in ranked_indices:
             key = feature_names[idx]
@@ -64,7 +66,7 @@ class SHAPService:
                     "detail": detail,
                     "is_predictive_driver": True
                 })
-                
+
         return drivers
 
     @classmethod
@@ -78,13 +80,15 @@ class SHAPService:
         elif key == "contractor_financial_stress":
             return f"Subcontractor liquidity stress index flagged at {val} / 1.0"
         elif key == "cost_escalation_ratio":
-            return f"Sanction expanded by {(val - 1.0) * 100:.1f}% over original sanction"
+            pct = (val - 1.0) * 100.0
+            return f"Sanction expanded by {pct:.1f}% over original sanction"
         elif key == "geological_surprises_index":
             return f"High Himalayan/tunnel geological surprise score of {val} / 1.0"
         elif key == "steel_price_escalation":
             return f"Bulk commodity price inflation increased by {val}%"
         else:
             return f"Metric value of {val} deviates from peer sector benchmark"
+
 
 def compute_project_shap_breakdown(project: dict) -> dict:
     drivers = SHAPService.explain_prediction(project)
