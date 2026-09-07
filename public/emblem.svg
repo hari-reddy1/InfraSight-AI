@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130" width="100%" height="100%">
+  <!-- Lion Capital of Ashoka (State Emblem of India) -->
+  <g fill="#c99738" stroke="#8a6414" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Top Central Lion -->
+    <path d="M 46,12 C 46,7 54,7 54,12 C 57,10 62,14 60,18 C 62,20 61,25 58,27 C 58,32 54,34 50,34 C 46,34 42,32 42,27 C 39,25 38,20 40,18 C 38,14 43,10 46,12 Z" fill="#dfab43"/>
+    <!-- Left Lion Face Profile -->
+    <path d="M 40,18 C 36,16 32,20 33,25 C 30,27 30,32 34,35 C 35,40 40,42 43,40 C 42,35 41,30 40,25 Z" fill="#c99738"/>
+    <!-- Right Lion Face Profile -->
+    <path d="M 60,18 C 64,16 68,20 67,25 C 70,27 70,32 66,35 C 65,40 60,42 57,40 C 58,35 59,30 60,25 Z" fill="#c99738"/>
+    <!-- Lion Eyes and Mane Strands -->
+    <circle cx="47" cy="20" r="1.5" fill="#5a3d07"/>
+    <circle cx="53" cy="20" r="1.5" fill="#5a3d07"/>
+    <path d="M 47,24 Q 50,26 53,24" fill="none" stroke="#5a3d07" stroke-width="1"/>
+    <path d="M 50,22 L 50,24" stroke="#5a3d07" stroke-width="1"/>
+    <!-- Mane details -->
+    <path d="M 44,28 Q 50,32 56,28 Q 50,36 44,28 Z" fill="#b07f23"/>
+    
+    <!-- Lion Front Paws and Pillar Torso -->
+    <path d="M 41,40 C 41,48 40,58 40,65 C 43,67 47,67 48,65 C 48,58 48,48 48,40 Z" fill="#e5b853"/>
+    <path d="M 52,40 C 52,48 52,58 52,65 C 53,67 57,67 60,65 C 60,58 59,48 59,40 Z" fill="#e5b853"/>
+    <path d="M 48,42 L 52,42 L 52,63 L 48,63 Z" fill="#b07f23"/>
+    
+    <!-- Side Lions Outer Body -->
+    <path d="M 33,35 C 28,45 28,58 32,66 C 36,66 39,63 40,58 C 37,50 36,42 37,35 Z" fill="#dfab43"/>
+    <path d="M 67,35 C 72,45 72,58 68,66 C 64,66 61,63 60,58 C 63,50 64,42 63,35 Z" fill="#dfab43"/>
+    
+    <!-- Paws with Claws -->
+    <ellipse cx="36" cy="66" rx="4" ry="2" fill="#c99738"/>
+    <ellipse cx="44" cy="66" rx="4" ry="2" fill="#c99738"/>
+    <ellipse cx="56" cy="66" rx="4" ry="2" fill="#c99738"/>
+    <ellipse cx="64" cy="66" rx="4" ry="2" fill="#c99738"/>
+    
+    <!-- Abacus Platform (Circular Band) -->
+    <rect x="22" y="68" width="56" height="14" rx="2" fill="#d8a339" stroke="#7a550d" stroke-width="1"/>
+    
+    <!-- Ashoka Chakra on Abacus Center -->
+    <circle cx="50" cy="75" r="5.5" fill="#ffffff" stroke="#000088" stroke-width="0.8"/>
+    <circle cx="50" cy="75" r="1.2" fill="#000088"/>
+    <!-- 24 Spokes (simplified 12 spokes for crisp rendering) -->
+    <path d="M 50,69.5 L 50,80.5 M 44.5,75 L 55.5,75 M 46.1,71.1 L 53.9,78.9 M 46.1,78.9 L 53.9,71.1 M 47.7,70.2 L 52.3,79.8 M 47.7,79.8 L 52.3,70.2" stroke="#000088" stroke-width="0.5"/>
+    
+    <!-- Galloping Horse on Left of Chakra -->
+    <path d="M 28,75 Q 31,71 35,74 Q 38,73 40,76 Q 37,78 33,77 Q 30,80 27,77 Z" fill="#7a550d"/>
+    
+    <!-- Charging Bull on Right of Chakra -->
+    <path d="M 62,75 Q 65,72 69,73 Q 72,74 74,77 Q 70,78 67,77 Q 64,79 61,76 Z" fill="#7a550d"/>
+    
+    <!-- Inverted Lotus Base -->
+    <path d="M 24,82 Q 50,85 76,82 C 74,94 66,102 50,102 C 34,102 26,94 24,82 Z" fill="#c99738" stroke="#7a550d" stroke-width="1"/>
+    <path d="M 32,83 Q 50,98 68,83" fill="none" stroke="#946714" stroke-width="0.8"/>
+    <path d="M 40,84 Q 50,99 60,84" fill="none" stroke="#946714" stroke-width="0.8"/>
+    <path d="M 46,85 Q 50,100 54,85" fill="none" stroke="#946714" stroke-width="0.8"/>
+    
+    <!-- Plinth Base -->
+    <rect x="18" y="103" width="64" height="6" rx="1.5" fill="#9e6e15" stroke="#634407" stroke-width="1"/>
+  </g>
+  
+  <!-- Satyameva Jayate in Devanagari Script -->
+  <text x="50" y="122" font-family="'Noto Sans Devanagari', 'Mangal', 'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#7a550d" text-anchor="middle" letter-spacing="1">
+    सत्यमेव जयते
+  </text>
+</svg>
