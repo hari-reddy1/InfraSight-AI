@@ -4,16 +4,17 @@ import Navbar from './components/Navbar';
 import WhatsNewTicker from './components/WhatsNewTicker';
 import DashboardView from './components/DashboardView';
 import ProjectTable from './components/ProjectTable';
-import RiskIntelligenceView from './components/RiskIntelligenceView';
-import EarlyWarningPanel from './components/EarlyWarningPanel';
-import ProjectMap from './components/ProjectMap';
-import DataStatusView from './components/DataStatusView';
 import ModelPerformanceView from './components/ModelPerformanceView';
-import AdminView from './components/AdminView';
+import ModelComparer from './components/ModelComparer';
+import SectorBenchmarking from './components/SectorBenchmarking';
+import ProjectMap from './components/ProjectMap';
+import LLMAssistant from './components/LLMAssistant';
+import EarlyWarningPanel from './components/EarlyWarningPanel';
+import FlashReportsSection from './components/FlashReportsSection';
 import ProjectDetailModal from './components/ProjectDetailModal';
 import { SAMPLE_PROJECTS } from './data/sampleProjects';
 import { INITIAL_ALERTS } from './data/alertsData';
-import { Mail, Phone, MapPin, Database, Sparkles } from 'lucide-react';
+import { Mail, Phone, MapPin, Sparkles } from 'lucide-react';
 import { api } from './utils/api';
 
 export default function App() {
@@ -158,8 +159,8 @@ export default function App() {
       {/* 3. Official Flash Report Ticker */}
       <WhatsNewTicker 
         onOpenReport={(item) => {
-          if (item.type === 'report') setActiveTab('data_status');
-          else if (item.type === 'alert') setActiveTab('alerts');
+          if (item.type === 'report') setActiveTab('reports');
+          else setActiveTab('early_warnings');
         }}
       />
 
@@ -187,7 +188,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* 5. Main 8 Government Monitoring Views */}
+      {/* 5. Main Government Monitoring Views (Dashboard, Projects, Analytics, Map, AI, Early Warnings, Reports) */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
         {/* VIEW 1: DASHBOARD */}
@@ -218,24 +219,16 @@ export default function App() {
           </div>
         )}
 
-        {/* VIEW 3: RISK INTELLIGENCE */}
-        {activeTab === 'risk_intelligence' && (
-          <div className="animate-fadeIn">
-            <RiskIntelligenceView
-              projects={filteredProjects}
-              onSelectProject={(proj) => setSelectedProject(proj)}
-            />
+        {/* VIEW 3: ANALYTICS */}
+        {activeTab === 'analytics' && (
+          <div className="space-y-6 animate-fadeIn">
+            <ModelPerformanceView />
+            <ModelComparer />
+            <SectorBenchmarking />
           </div>
         )}
 
-        {/* VIEW 4: ALERTS (EARLY WARNING CENTER) */}
-        {activeTab === 'alerts' && (
-          <div className="animate-fadeIn">
-            <EarlyWarningPanel />
-          </div>
-        )}
-
-        {/* VIEW 5: GEOSPATIAL MAP */}
+        {/* VIEW 4: GEOSPATIAL MAP */}
         {activeTab === 'map' && (
           <div className="animate-fadeIn">
             <ProjectMap
@@ -245,29 +238,24 @@ export default function App() {
           </div>
         )}
 
-        {/* VIEW 6: DATA STATUS & PROVENANCE */}
-        {activeTab === 'data_status' && (
+        {/* VIEW 5: AI INTELLIGENCE ASSISTANT */}
+        {activeTab === 'ai' && (
           <div className="animate-fadeIn">
-            <DataStatusView
-              dataStatus={dataStatus}
-              onRefresh={loadLiveData}
-            />
+            <LLMAssistant />
           </div>
         )}
 
-        {/* VIEW 7: MODEL PERFORMANCE */}
-        {activeTab === 'model_performance' && (
+        {/* VIEW 6: EARLY WARNINGS */}
+        {activeTab === 'early_warnings' && (
           <div className="animate-fadeIn">
-            <ModelPerformanceView />
+            <EarlyWarningPanel />
           </div>
         )}
 
-        {/* VIEW 8: ADMINISTRATION & AUDIT */}
-        {activeTab === 'administration' && (
+        {/* VIEW 7: FLASH REPORTS & PUBLICATIONS */}
+        {activeTab === 'reports' && (
           <div className="animate-fadeIn">
-            <AdminView
-              projects={projects}
-            />
+            <FlashReportsSection onAskAIAboutReport={() => setActiveTab('ai')} />
           </div>
         )}
 

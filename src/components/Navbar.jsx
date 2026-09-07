@@ -11,12 +11,11 @@ export default function Navbar({
   const navLinks = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'projects', label: 'Projects' },
-    { id: 'risk_intelligence', label: 'Risk Intelligence' },
-    { id: 'alerts', label: 'Alerts', badge: activeAlertsCount },
-    { id: 'map', label: 'Geospatial Map' },
-    { id: 'data_status', label: 'Data Status' },
-    { id: 'model_performance', label: 'Model Performance' },
-    { id: 'administration', label: 'Administration' },
+    { id: 'analytics', label: 'Analytics' },
+    { id: 'map', label: 'Map' },
+    { id: 'ai', label: 'AI' },
+    { id: 'early_warnings', label: 'Early Warnings', badge: activeAlertsCount },
+    { id: 'reports', label: 'Reports' },
   ];
 
   return (
