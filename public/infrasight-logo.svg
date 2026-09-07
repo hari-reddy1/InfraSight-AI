@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="100%" height="100%">
+  <defs>
+    <linearGradient id="infraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+    <linearGradient id="eyeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="50%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#16a34a" />
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Left Icon Emblem: Infrastructure Bridge + Vision Sight Lens + AI Core -->
+  <g transform="translate(8, 8)" filter="url(#subtleShadow)">
+    <!-- Outer Rounded Hexagon / Shield Frame -->
+    <rect x="2" y="2" width="60" height="60" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    
+    <!-- Infrastructure Bridge Cable Strands / Tower -->
+    <path d="M 12,50 L 32,14 L 52,50" fill="none" stroke="#0a2540" stroke-width="3" stroke-linecap="round"/>
+    <line x1="32" y1="14" x2="32" y2="50" stroke="#0a2540" stroke-width="2.5"/>
+    
+    <!-- Cable Stay Vectors -->
+    <line x1="20" y1="36" x2="32" y2="24" stroke="#94a3b8" stroke-width="1.2"/>
+    <line x1="44" y1="36" x2="32" y2="24" stroke="#94a3b8" stroke-width="1.2"/>
+    <line x1="16" y1="44" x2="32" y2="32" stroke="#94a3b8" stroke-width="1.2"/>
+    <line x1="48" y1="44" x2="32" y2="32" stroke="#94a3b8" stroke-width="1.2"/>
+
+    <!-- Predictive Vision Sight / Aperture Eye Arc -->
+    <path d="M 10,34 Q 32,18 54,34 Q 32,50 10,34 Z" fill="none" stroke="url(#eyeGrad)" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Central AI Core Spark Node -->
+    <circle cx="32" cy="34" r="5.5" fill="#ea580c"/>
+    <circle cx="32" cy="34" r="2.5" fill="#ffffff"/>
+    
+    <!-- Pulse Ring -->
+    <circle cx="32" cy="34" r="8.5" fill="none" stroke="#0284c7" stroke-width="1" stroke-dasharray="2 2"/>
+  </g>
+
+  <!-- Brand Typography -->
+  <g transform="translate(82, 12)">
+    <!-- InfraSight Text -->
+    <text x="0" y="34" font-family="'Outfit', 'Inter', sans-serif" font-size="32" font-weight="900" letter-spacing="-0.5" fill="#0a2540">
+      Infra<tspan fill="#ea580c">Sight</tspan>
+    </text>
+
+    <!-- AI Badge -->
+    <rect x="156" y="10" width="38" height="24" rx="6" fill="#0a2540"/>
+    <text x="175" y="27" font-family="'Outfit', 'Inter', sans-serif" font-size="14" font-weight="800" fill="#ffffff" text-anchor="middle">
+      AI
+    </text>
+
+    <!-- Subtitle / Tagline -->
+    <text x="0" y="50" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#475569" letter-spacing="0.5">
+      PREDICTIVE INFRASTRUCTURE INTELLIGENCE
+    </text>
+    <text x="0" y="62" font-family="'Inter', sans-serif" font-size="7.5" font-weight="600" fill="#ea580c" letter-spacing="0.3">
+      DECISION-SUPPORT LAYER FOR MoSPI PAIMANA
+    </text>
+  </g>
+</svg>

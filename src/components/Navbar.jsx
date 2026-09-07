@@ -21,12 +21,11 @@ export default function Navbar({
 
   return (
     <header className="bg-white border-b border-slate-200 shadow-xs">
-      {/* Official Government of India & PAIMANA Main Branding Bar */}
+      {/* Main Government & InfraSight AI Branding Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-4">
         
         {/* Left: Indian State Emblem + Ministry Bilingual Title */}
         <div className="flex items-center space-x-3.5">
-          {/* Official Emblem of India */}
           <div className="h-14 w-12 flex items-center justify-center shrink-0">
             <img 
               src="/emblem.svg" 
@@ -37,7 +36,7 @@ export default function Navbar({
 
           <div className="border-l border-slate-300 pl-3">
             <h3 className="text-xs font-bold text-slate-800 leading-tight">
-              भारत सरकार <span className="font-normal text-slate-500">•</span> GOVERNMENT OF INDIA
+              भारत सरकार <span className="font-normal text-slate-400">•</span> GOVERNMENT OF INDIA
             </h3>
             <p className="text-[11px] font-bold text-[#0a2540] leading-tight mt-0.5">
               सांख्यिकी और कार्यक्रम कार्यान्वयन मंत्रालय
@@ -48,13 +47,13 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Center: Official PAIMANA-AI Emblem Logo */}
+        {/* Center: Official InfraSight AI Logo */}
         <div className="flex items-center border-l-0 lg:border-l border-slate-200 lg:pl-4">
-          <div className="h-12 flex items-center">
+          <div className="h-13 flex items-center">
             <img 
-              src="/paimana-logo.svg" 
-              alt="PAIMANA-AI Logo" 
-              className="h-11 w-auto object-contain cursor-pointer"
+              src="/infrasight-logo.svg" 
+              alt="InfraSight AI Logo" 
+              className="h-12 w-auto object-contain cursor-pointer transition-transform hover:scale-[1.02]"
               onClick={() => setActiveTab('overview')}
             />
           </div>
