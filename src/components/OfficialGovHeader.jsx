@@ -3,10 +3,9 @@ import { Globe, UserCheck } from 'lucide-react';
 
 export default function OfficialGovHeader({ selectedRole, setSelectedRole }) {
   const roles = [
-    { id: 'policymaker', label: 'Ministry / IPMD Officer' },
-    { id: 'project_officer', label: 'Project Director (Line Ministry)' },
-    { id: 'agency_user', label: 'Implementing Agency' },
-    { id: 'data_scientist', label: 'Data Scientist (Admin)' },
+    { id: 'policymaker', label: 'Senior Decision Maker (MoSPI / Cabinet)' },
+    { id: 'project_officer', label: 'Monitoring Officer (Line Ministry)' },
+    { id: 'data_scientist', label: 'System Administrator (Audit & Ingestion)' },
   ];
 
   return (

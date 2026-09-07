@@ -1,6 +1,6 @@
 """
 InfraSight AI - Backend Server Runner
-SIH 2026 Problem Statement SIH26103
+Project Intelligence & Early Warning Decision Support System
 """
 
 import uvicorn

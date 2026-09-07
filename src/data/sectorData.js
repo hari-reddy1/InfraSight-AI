@@ -1,4 +1,4 @@
-// Sector Peer Benchmarking & Model Evaluation Data (SIH26103 Dimension c)
+// Sector Peer Benchmarking & Model Evaluation Data (MoSPI Statistical Validation)
 
 export const SECTOR_BENCHMARKS = [
   {
@@ -127,7 +127,7 @@ export const MODEL_EVALUATION_METRICS = {
   ]
 };
 
-// Variable Importance & Incremental Power breakdown (SIH26103 Task c)
+// Variable Importance & Incremental Predictive Lift Breakdown
 export const VARIABLE_POWER_BREAKDOWN = [
   { variableGroup: "Approved & Revised Cost Ratio (CUF)", category: "CUF Standard", shapImportance: 0.24, predictivePowerScore: 82 },
   { variableGroup: "Milestone Delay Trajectory (CUF)", category: "CUF Standard", shapImportance: 0.21, predictivePowerScore: 78 },

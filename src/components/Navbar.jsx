@@ -9,14 +9,14 @@ export default function Navbar({
   activeAlertsCount 
 }) {
   const navLinks = [
-    { id: 'overview', label: 'Home' },
-    { id: 'projects', label: 'Projects Directory' },
-    { id: 'analytics', label: 'Predictive Models' },
-    { id: 'alerts', label: 'Early Warnings', badge: activeAlertsCount },
-    { id: 'benchmarking', label: 'Sector Analytics' },
-    { id: 'assistant', label: 'LLM Intelligence Assistant' },
-    { id: 'ingestion', label: 'CUF Ingestion' },
-    { id: 'reports', label: 'Flash Reports' },
+    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'risk_intelligence', label: 'Risk Intelligence' },
+    { id: 'alerts', label: 'Alerts', badge: activeAlertsCount },
+    { id: 'map', label: 'Geospatial Map' },
+    { id: 'data_status', label: 'Data Status' },
+    { id: 'model_performance', label: 'Model Performance' },
+    { id: 'administration', label: 'Administration' },
   ];
 
   return (
@@ -54,7 +54,7 @@ export default function Navbar({
               src="/infrasight-logo.svg" 
               alt="InfraSight AI Logo" 
               className="h-12 w-auto object-contain cursor-pointer transition-transform hover:scale-[1.02]"
-              onClick={() => setActiveTab('overview')}
+              onClick={() => setActiveTab('dashboard')}
             />
           </div>
         </div>

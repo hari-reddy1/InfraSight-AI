@@ -2,7 +2,10 @@ from typing import List, Dict, Any, Tuple
 
 class DataValidator:
     """
-    Strict validation service following SIH26103 Data Governance rules:
+    InfraSight AI - Data Ingestion Validation Engine
+    Strict validation service following MoSPI Data Governance rules:
+    1. Approved Cost > 0
+    2. Revised Cost >= Approved Cost (or marked with escalation flag)
     - Never silently alter questionable official values.
     - Flag invalid records, duplicates, negatives, and out-of-bound ranges.
     """

@@ -1,6 +1,6 @@
 """
 InfraSight AI - Primary REST API Router
-SIH 2026 Problem Statement SIH26103
+Project Intelligence & Early Warning Decision Support System
 
 Complies with:
 - Zero Mock Data policy (all records trace to authentic MoSPI data or validated derivations)
@@ -8,6 +8,7 @@ Complies with:
 - Explainable AI ("Predictive drivers", not causal statements)
 - Multi-factor executive prioritization
 - CARTO geospatial rendering with honest null handling
+- MongoDB document store for semi-structured reporting records
 """
 
 import os
@@ -19,6 +20,7 @@ from sqlalchemy import desc, func
 
 from app.database import get_db
 from app.config import settings
+from app.mongodb import mongo_manager
 from app.models.schema import (
     Project, ProjectSnapshot, RiskPrediction, RiskExplanation,
     Alert, Intervention, DataQualityLog, SyncRun, ModelVersion, AuditEvent
@@ -35,29 +37,39 @@ router = APIRouter()
 # ---------------------------------------------------------------------------
 @router.get("/health")
 def get_system_health(db: Session = Depends(get_db)):
-    """System health check and database connectivity verification."""
+    """System health check, MongoDB connectivity, and provenance status verification."""
     try:
-        project_count = db.query(Project).count()
-        snapshot_count = db.query(ProjectSnapshot).count()
-        active_model = db.query(ModelVersion).filter(ModelVersion.is_active == True).first()
-        model_name = active_model.model_name if active_model else "GradientBoosting-CUF-v2.4"
-        
+        mongo_status = mongo_manager.get_status()
+        mongo_db = mongo_manager.db
+        mongo_projects_count = mongo_db["projects"].count_documents({})
+        mongo_snapshots_count = mongo_db["project_snapshots"].count_documents({})
+
+        active_model = "GradientBoosting-CUF-v2.4"
+        try:
+            mod_doc = mongo_db["model_versions"].find_one({"is_active": True})
+            if mod_doc and "model_name" in mod_doc:
+                active_model = mod_doc["model_name"]
+        except Exception:
+            pass
+
         return {
             "status": "HEALTHY",
             "service": "InfraSight AI Decision Support Engine",
-            "sih_problem_statement": "SIH26103",
             "database_connected": True,
+            "database_type": "MongoDB Atlas" if mongo_status["is_connected"] else "MongoDB Document Layer",
+            "mongodb": mongo_status,
             "database_records": {
-                "projects": project_count,
-                "snapshots": snapshot_count
+                "projects": mongo_projects_count or db.query(Project).count(),
+                "snapshots": mongo_snapshots_count or db.query(ProjectSnapshot).count()
             },
-            "active_model_version": model_name,
+            "active_model_version": active_model,
             "provenance_standard": "MoSPI PAIMANA / OCMS Decision Layer",
             "timestamp": datetime.datetime.utcnow().isoformat() + "Z"
         }
     except Exception as e:
         return {
             "status": "DEGRADED",
+            "service": "InfraSight AI Decision Support Engine",
             "error": str(e),
             "timestamp": datetime.datetime.utcnow().isoformat() + "Z"
         }
@@ -812,3 +824,227 @@ def trigger_data_sync(db: Session = Depends(get_db)):
         sync_run.error_message = str(e)
         db.commit()
         raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")
+
+
+# ---------------------------------------------------------------------------
+# 11. Specific Project Sub-Resources (Section 30 API Specs)
+# ---------------------------------------------------------------------------
+@router.get("/projects/{project_id}/history")
+def get_project_history(project_id: int, db: Session = Depends(get_db)):
+    """Longitudinal snapshot history for a project across reporting periods."""
+    snapshots = db.query(ProjectSnapshot).filter(ProjectSnapshot.project_id == project_id).order_by(ProjectSnapshot.id).all()
+    if not snapshots:
+        raise HTTPException(status_code=404, detail="No historical observations found for project")
+    
+    return {
+        "project_id": project_id,
+        "observations_count": len(snapshots),
+        "history": [
+            {
+                "id": s.id,
+                "reporting_period": s.reporting_period,
+                "approved_cost_cr": s.approved_cost_cr,
+                "revised_cost_cr": s.revised_cost_cr,
+                "expenditure_cr": s.expenditure_cr,
+                "physical_progress_pct": s.physical_progress_pct,
+                "financial_progress_pct": round((s.expenditure_cr / s.revised_cost_cr * 100.0), 1) if s.revised_cost_cr > 0 else 0.0,
+                "time_overrun_months": s.time_overrun_months,
+                "original_doc": s.original_doc,
+                "revised_doc": s.revised_doc,
+                "data_source": s.data_source
+            } for s in snapshots
+        ]
+    }
+
+
+@router.get("/projects/{project_id}/risk")
+def get_project_risk_metrics(project_id: int, db: Session = Depends(get_db)):
+    """Risk scores, probabilities, and confidence for a single project."""
+    pred = db.query(RiskPrediction).filter(RiskPrediction.project_id == project_id).order_by(desc(RiskPrediction.id)).first()
+    if not pred:
+        raise HTTPException(status_code=404, detail="Risk prediction not available for this project")
+
+    return {
+        "project_id": project_id,
+        "reporting_period": pred.reporting_period,
+        "overall_risk_score": pred.overall_risk_score,
+        "risk_band": pred.risk_band,
+        "cost_overrun_prob": pred.cost_overrun_prob,
+        "time_overrun_prob": pred.time_overrun_prob,
+        "predicted_final_cost_cr": pred.predicted_final_cost_cr,
+        "predicted_delay_months": pred.predicted_delay_months,
+        "priority_score": pred.priority_score,
+        "model_confidence": pred.model_confidence,
+        "model_version": pred.model_version,
+        "provenance": "ML PREDICTION"
+    }
+
+
+@router.get("/projects/{project_id}/explanations")
+def get_project_explanations(project_id: int, db: Session = Depends(get_db)):
+    """Explainable AI SHAP attribution breakdown for a single project."""
+    pred = db.query(RiskPrediction).filter(RiskPrediction.project_id == project_id).order_by(desc(RiskPrediction.id)).first()
+    if not pred:
+        raise HTTPException(status_code=404, detail="Explanations not found for project")
+
+    explanations = db.query(RiskExplanation).filter(RiskExplanation.prediction_id == pred.id).all()
+    return {
+        "project_id": project_id,
+        "explanation_type": "PREDICTIVE_DRIVERS_ONLY",
+        "governance_notice": "Features represent statistical correlation and model weights, not causal blame.",
+        "drivers": [
+            {
+                "feature_name": e.feature_name,
+                "feature_value": e.feature_value,
+                "attribution_weight": e.shap_value,
+                "impact_pct": e.impact_pct,
+                "description": e.detail,
+                "is_predictive_driver": e.is_predictive_driver
+            } for e in explanations
+        ]
+    }
+
+
+@router.get("/sync/status")
+def get_sync_status(db: Session = Depends(get_db)):
+    """Status of latest connector synchronization."""
+    latest = db.query(SyncRun).order_by(desc(SyncRun.sync_started_at)).first()
+    if not latest:
+        return {"status": "INITIALIZED", "records_ingested": 0, "last_sync": None}
+
+    return {
+        "sync_id": latest.id,
+        "source": latest.source,
+        "reporting_period": latest.reporting_period,
+        "status": latest.status,
+        "records_ingested": latest.records_ingested,
+        "sync_started_at": latest.sync_started_at.isoformat() + "Z" if latest.sync_started_at else None,
+        "sync_completed_at": latest.sync_completed_at.isoformat() + "Z" if latest.sync_completed_at else None,
+        "error": latest.error_message
+    }
+
+
+# ---------------------------------------------------------------------------
+# 12. Officer Interventions & Audit Logs (Section 26 & 32)
+# ---------------------------------------------------------------------------
+@router.post("/interventions")
+def record_officer_intervention(
+    payload: Dict[str, Any],
+    db: Session = Depends(get_db)
+):
+    """
+    Allow an authorized monitoring officer to record an intervention on a project:
+    Action Taken, Responsible Authority, Date, Expected Resolution, Remarks.
+    """
+    project_id = payload.get("project_id")
+    alert_id = payload.get("alert_id")
+    action_taken = payload.get("action_taken", "").strip()
+    responsible_authority = payload.get("responsible_authority", "Line Ministry / Project Director")
+    expected_resolution_date = payload.get("expected_resolution_date", "")
+    remarks = payload.get("remarks", "")
+    recorded_by = payload.get("recorded_by", "Monitoring Officer")
+
+    if not project_id or not action_taken:
+        raise HTTPException(status_code=400, detail="project_id and action_taken are required")
+
+    # If alert_id is not provided, associate with first alert of the project or create placeholder
+    if not alert_id:
+        existing_alert = db.query(Alert).filter(Alert.project_id == project_id).first()
+        if existing_alert:
+            alert_id = existing_alert.id
+        else:
+            new_alert = Alert(
+                project_id=project_id,
+                severity="HIGH",
+                alert_type="OFFICER_REVIEW",
+                trigger_metric="MANUAL_INTERVENTION",
+                trigger_description="Officer recorded direct monitoring intervention",
+                recommended_action=action_taken
+            )
+            db.add(new_alert)
+            db.flush()
+            alert_id = new_alert.id
+
+    full_action_text = f"{action_taken} | Authority: {responsible_authority} | Target: {expected_resolution_date} | Remarks: {remarks}"
+    
+    intervention = Intervention(
+        alert_id=alert_id,
+        project_id=project_id,
+        action_taken=full_action_text,
+        recorded_by=recorded_by,
+        recorded_at=datetime.datetime.utcnow()
+    )
+    db.add(intervention)
+
+    # Add audit event
+    audit = AuditEvent(
+        event_type="INTERVENTION_RECORDED",
+        description=f"Officer '{recorded_by}' recorded intervention for Project #{project_id}",
+        user_role="MONITORING_OFFICER",
+        metadata_payload={
+            "project_id": project_id,
+            "authority": responsible_authority,
+            "action": action_taken
+        }
+    )
+    db.add(audit)
+    db.commit()
+
+    return {
+        "status": "SUCCESS",
+        "intervention_id": intervention.id,
+        "project_id": project_id,
+        "action_recorded": action_taken,
+        "recorded_by": recorded_by,
+        "timestamp": intervention.recorded_at.isoformat() + "Z"
+    }
+
+
+@router.get("/interventions")
+def list_interventions(
+    project_id: Optional[int] = None,
+    limit: int = Query(50, ge=1, le=200),
+    db: Session = Depends(get_db)
+):
+    """Fetch recorded officer interventions with project metadata."""
+    query = db.query(Intervention)
+    if project_id:
+        query = query.filter(Intervention.project_id == project_id)
+
+    interventions = query.order_by(desc(Intervention.recorded_at)).limit(limit).all()
+    results = []
+    for it in interventions:
+        p = db.query(Project).filter(Project.id == it.project_id).first()
+        results.append({
+            "id": it.id,
+            "project_id": it.project_id,
+            "project_code": p.project_code if p else "N/A",
+            "project_name": p.project_name if p else "Unknown",
+            "ministry": p.ministry if p else "Unknown",
+            "action_taken": it.action_taken,
+            "recorded_by": it.recorded_by,
+            "recorded_at": it.recorded_at.isoformat() + "Z" if it.recorded_at else None
+        })
+    return {"total": len(results), "interventions": results}
+
+
+@router.get("/audit-logs")
+def get_audit_logs(
+    limit: int = Query(50, ge=1, le=200),
+    db: Session = Depends(get_db)
+):
+    """Chronological audit trail of monitoring actions and data events."""
+    events = db.query(AuditEvent).order_by(desc(AuditEvent.timestamp)).limit(limit).all()
+    return {
+        "total": len(events),
+        "events": [
+            {
+                "id": ev.id,
+                "event_type": ev.event_type,
+                "description": ev.description,
+                "user_role": ev.user_role or "SYSTEM",
+                "timestamp": ev.timestamp.isoformat() + "Z",
+                "metadata": ev.metadata_payload
+            } for ev in events
+        ]
+    }

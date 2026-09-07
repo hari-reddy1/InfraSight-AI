@@ -15,7 +15,11 @@ class Settings(BaseSettings):
     PAIMANA_API_URL: str = os.getenv("PAIMANA_API_URL", "")
     PAIMANA_API_KEY: str = os.getenv("PAIMANA_API_KEY", "")
     
-    # Database Configuration (SQLite default for embedded zero-friction demo, PostgreSQL compatible)
+    # Database Configuration - MongoDB Primary Database
+    MONGODB_URI: str = os.getenv("MONGODB_URI", os.getenv("MONGO_URL", "mongodb://localhost:27017"))
+    MONGODB_DB_NAME: str = os.getenv("MONGODB_DB_NAME", "infrasight_ai")
+    
+    # Secondary / Legacy embedded relational database URL fallback
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./infrasight.db")
     
     # Configurable Risk Thresholds
@@ -31,6 +35,11 @@ class Settings(BaseSettings):
     PRIORITY_WEIGHT_CONFIDENCE: float = 0.10
 
     class Config:
-        env_file = ".env"
+        env_file = (
+            os.path.join(os.path.dirname(__file__), "..", ".env"),
+            os.path.join(os.path.dirname(__file__), "..", "..", ".env"),
+            ".env"
+        )
+        extra = "ignore"
 
 settings = Settings()

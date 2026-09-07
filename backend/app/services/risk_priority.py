@@ -1,8 +1,6 @@
 """
-InfraSight AI - Risk Priority Engine
-SIH 2026 Problem Statement SIH26103
-
-Ranks projects to answer the executive question:
+InfraSight AI - Multi-Factor Executive Priority Engine
+Prioritizes projects requiring senior intervention based on:
 "Which projects deserve government attention first?"
 
 Formula:

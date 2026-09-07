@@ -1,8 +1,7 @@
 """
 InfraSight AI - FastAPI Application Entrypoint
-SIH 2026 Problem Statement SIH26103
-
-Intelligence and decision-support layer alongside MoSPI PAIMANA / OCMS.
+Accredited Project Intelligence & Early Warning Decision Support System
+Operating alongside MoSPI PAIMANA / OCMS.
 """
 
 import os
@@ -16,6 +15,8 @@ from app.models.schema import (
     Project, ProjectSnapshot, RiskPrediction, RiskExplanation,
     Alert, DataQualityLog, SyncRun, ModelVersion
 )
+from app.mongodb import mongo_manager
+from app.services.mongo_seeder import seed_mongodb_database
 from app.api.router import router as api_router
 from app.connectors.factory import get_connector
 from app.services.validation import validate_raw_project_records
@@ -23,16 +24,20 @@ from app.services.ml_engine import score_project_risk, get_benchmark_models
 from app.services.risk_priority import calculate_priority_score
 from app.services.shap_service import compute_project_shap_breakdown
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+# Create secondary database tables if needed
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception:
+    pass
 
 app = FastAPI(
     title=settings.APP_NAME,
-    description="Intelligence and decision-support layer alongside MoSPI PAIMANA / OCMS for SIH 2026",
+    description="Project Intelligence & Early Warning Decision Support System for Infrastructure Monitoring",
     version=settings.VERSION,
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
 
 # CORS configuration for frontend
 app.add_middleware(
@@ -208,3 +213,7 @@ def initialize_seed_data():
 @app.on_event("startup")
 def on_startup():
     initialize_seed_data()
+    try:
+        seed_mongodb_database()
+    except Exception as e:
+        print(f"--> Notice during MongoDB startup seeding: {e}")

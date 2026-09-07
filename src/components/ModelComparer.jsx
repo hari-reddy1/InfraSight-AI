@@ -52,7 +52,7 @@ export default function ModelComparer() {
               </h2>
             </div>
             <p className="text-xs text-slate-600 max-w-2xl">
-              SIH26103 Requirement: Empirical comparison of classical statistical methods (OLS Regression, ARIMA) vs. modern Machine Learning models (XGBoost, LightGBM) trained on historical PAIMANA/OCMS data.
+              Statistical Validation Benchmark: Empirical comparison of classical statistical methods (OLS Regression, ARIMA) vs. modern Machine Learning models (XGBoost, LightGBM) trained on historical PAIMANA/OCMS data.
             </p>
           </div>
 
@@ -190,7 +190,7 @@ export default function ModelComparer() {
           </div>
         </div>
       ) : (
-        /* Incremental Predictive Lift Breakdown (SIH26103 Task c) */
+        /* Incremental Predictive Lift Breakdown (Extended Signal Analysis) */
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
           <div>
             <div className="flex items-center space-x-2 mb-1">
@@ -235,7 +235,7 @@ export default function ModelComparer() {
               <div className="space-y-3">
                 <h4 className="text-sm font-bold text-slate-900 font-outfit flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  Key Finding for MoSPI (SIH26103 Dimension c)
+                  Key Finding for MoSPI Infrastructure Monitoring
                 </h4>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   While existing CUF fields capture historical performance well (providing ~65% baseline predictive accuracy), adding 4 non-CUF extended variables improves accuracy by <strong className="text-emerald-700">+34.2%</strong> and expands early warning lead time from <strong className="text-orange-700">1.8 months to 5.4 months</strong>.

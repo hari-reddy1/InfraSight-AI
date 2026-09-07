@@ -1,6 +1,6 @@
 """
 InfraSight AI - Early Warning Detection Engine
-SIH 2026 Problem Statement SIH26103
+Project Intelligence & Early Warning Decision Support System
 
 Analyzes project telemetry and historical snapshots to detect early warning triggers:
 1. Financial vs Physical Divergence Gap

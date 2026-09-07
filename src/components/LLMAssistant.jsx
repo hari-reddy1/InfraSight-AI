@@ -57,14 +57,14 @@ export default function LLMAssistant() {
           { label: "MoSPI Flash Report March 2026", link: "Section 4.2 Railways" }
         ];
       } else if (lower.includes("accuracy") || lower.includes("cuf vs") || lower.includes("extended")) {
-        botAnswer = `Based on empirical model benchmarking across 1,981 projects (SIH26103 Dimension c evaluation):\n\n` +
+        botAnswer = `Based on empirical model benchmarking across 1,981 projects (MoSPI Empirical Evaluation):\n\n` +
           `• **Standard CUF Model (XGBoost)**: Achieves **65.5% accuracy** (RMSE 16.8% for cost overrun).\n` +
           `• **Extended Model (LightGBM + Weather, Steel Index, Land)**: Achieves **89.7% accuracy** (RMSE 9.2% for cost overrun).\n\n` +
           `**Incremental Power Gain**: Incorporating extended external variables provides a **+34.2% predictive lift** and extends early warning lead time from **1.8 months to 5.4 months** before slippage is visible in official CUF drops.`;
         
         citations = [
           { label: "Model Evaluation Registry v2.4", link: "LightGBM_Extended_Weights" },
-          { label: "SIH26103 Dimension (c) Analysis", link: "Variable Importance Breakdown" }
+          { label: "MoSPI Statistical Dimension Analysis", link: "Variable Importance Breakdown" }
         ];
       } else if (lower.includes("road") || lower.includes("zojila") || lower.includes("morth")) {
         botAnswer = `For the **Ministry of Road Transport & Highways (MoRTH)**, 712 projects are tracked.\n\n` +

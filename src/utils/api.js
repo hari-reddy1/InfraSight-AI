@@ -1,6 +1,6 @@
 /**
  * InfraSight AI - Official Backend API Client
- * SIH 2026 Problem Statement SIH26103
+ * Project Intelligence & Early Warning Decision Support System
  * Connects directly to FastAPI backend on http://127.0.0.1:8000/api
  */
 
@@ -46,6 +46,9 @@ export const api = {
   },
 
   getProjectDetail: (projectId) => fetchJson(`/projects/${projectId}`),
+  getProjectHistory: (projectId) => fetchJson(`/projects/${projectId}/history`),
+  getProjectRisk: (projectId) => fetchJson(`/projects/${projectId}/risk`),
+  getProjectExplanations: (projectId) => fetchJson(`/projects/${projectId}/explanations`),
 
   // 4. What-If Scenario Simulation
   simulateProject: (projectId, params = {}) => {
@@ -88,5 +91,19 @@ export const api = {
   getModels: () => fetchJson("/models"),
 
   // 10. Manual Sync Trigger
-  triggerSync: () => fetchJson("/sync/trigger", { method: "POST" })
+  triggerSync: () => fetchJson("/sync/trigger", { method: "POST" }),
+
+  // 11. Interventions & Audit Trail
+  recordIntervention: (data) => fetchJson("/interventions", {
+    method: "POST",
+    body: JSON.stringify(data)
+  }),
+  getInterventions: (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.project_id) query.append("project_id", params.project_id);
+    if (params.status && params.status !== "ALL") query.append("status", params.status);
+    const qs = query.toString() ? `?${query.toString()}` : "";
+    return fetchJson(`/interventions${qs}`);
+  },
+  getAuditLogs: (limit = 25) => fetchJson(`/audit-logs?limit=${limit}`)
 };
